@@ -1,14 +1,14 @@
-package sorm.extensions
+package sext
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import sorm.extensions.Extensions._
+import sext.Sext._
 
 @RunWith(classOf[JUnitRunner])
-class ExtensionsTest extends FunSuite with ShouldMatchers {
-  import ExtensionsTest._
+class SextTest extends FunSuite with ShouldMatchers {
+  import SextTest._
   test("mapKeys") {
     Map("b" -> 1, "c" -> 4, "a" -> 9).mapKeys(_ + "1") should
     equal(Map("b1" -> 1, "c1" -> 4, "a1" -> 9))
@@ -31,7 +31,7 @@ class ExtensionsTest extends FunSuite with ShouldMatchers {
       .should( have size (2) )
   }
 }
-object ExtensionsTest {
+object SextTest {
   trait A
   trait B
 }

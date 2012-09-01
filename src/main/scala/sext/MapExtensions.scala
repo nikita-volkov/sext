@@ -1,4 +1,4 @@
-package sorm.extensions
+package sext
 
 
 class MapExtensions[K, V](x: Map[K, V]) {

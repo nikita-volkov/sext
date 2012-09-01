@@ -1,4 +1,4 @@
-package sorm.extensions
+package sext
 
 object ListMap {
   def apply[A, B](elems: (A, B)*) =

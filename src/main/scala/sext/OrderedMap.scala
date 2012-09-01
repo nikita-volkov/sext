@@ -1,4 +1,4 @@
-package sorm.extensions
+package sext
 
 import collection.immutable.Queue
 

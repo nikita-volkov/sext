@@ -1,10 +1,10 @@
-package sorm.extensions
+package sext
 
 import util.Try
 import reflect.runtime.universe._
 import reflect.runtime.currentMirror
 
-object Extensions {
+object Sext {
 
   implicit def mapExtensions[K, V](x: Map[K, V]) = new MapExtensions[K, V](x)
 
