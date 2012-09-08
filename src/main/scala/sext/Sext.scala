@@ -166,7 +166,7 @@ object Sext {
         a match {
           case a : Map[_, _] =>
             a.view
-              .map{ case (k, v) => k + "\n" + v.treeStringValue }
+              .map{ case (k, v) => k + ":\n" + v.treeStringValue }
               .map{ indent }
               .mkString("\n")
           case a : Traversable[_] =>
@@ -184,7 +184,7 @@ object Sext {
               .filterNot(_.isModule)
               .filterNot(_.isClass)
               .map( currentMirror.reflect(a).reflectField )
-              .map( f => f.symbol.name.toString -> f.get )
+              .map( f => f.symbol.name.toString.trim -> f.get )
               .reverse
               .as(collection.immutable.ListMap(_:_*))
               .treeStringValue
