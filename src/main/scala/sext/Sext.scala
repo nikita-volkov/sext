@@ -151,6 +151,35 @@ object Sext {
         else None
       }
   }
+  implicit class AnyTreeString[ A ]( a : A ){
+    def valueTreeString
+      : String
+      = a match {
+          case (k, v) =>
+            k.valueTreeString + "\n" +
+            v.valueTreeString.prependLines("| ")
+          case a : Traversable[_] =>
+            a.view
+              .map(_.valueTreeString)
+              .map("- " + _.indent(2).trim)
+              .mkString("\n")
+          case a : Product =>
+            currentMirror.reflect(a).symbol.typeSignature.members.toStream
+              .collect{ case a : TermSymbol => a }
+              .filterNot(_.isMethod)
+              .filterNot(_.isModule)
+              .filterNot(_.isClass)
+              .map( currentMirror.reflect(a).reflectField )
+              .map( f => f.symbol.name.toString.trim -> f.get )
+              .reverse
+              .as(collection.immutable.ListMap(_:_*))
+              .valueTreeString
+          case null =>
+            "null"
+          case _ =>
+            a.toString
+        }
+  }
   implicit class AnyFunctional[ A ]( α : A ) {
 
     def unfold
