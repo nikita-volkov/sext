@@ -152,31 +152,17 @@ object Sext {
       }
   }
   implicit class AnyTreeString[ A ]( a : A ){
-    def treeStringValue
+    def valueTreeString
       : String
-      = {
-        def indent ( a : String )
-          = a.lines.toStream match {
-              case h +: t =>
-                ( ("- " + h) +:
-                  t.map{"| " + _}
-                ) .mkString("\n")
-              case _ => ""
-            }
-        a match {
-          case a : Map[_, _] =>
-            a.view
-              .map{ case (k, v) => k + ":\n" + v.treeStringValue }
-              .map{ indent }
-              .mkString("\n")
+      = a match {
+          case (k, v) =>
+            k.valueTreeString + "\n" +
+            v.valueTreeString.prependLines("| ")
           case a : Traversable[_] =>
-            a.toStream.zipWithIndex.map(_.swap).toMap.treeStringValue
-          case a : Product
-            if currentMirror.reflect(a).symbol.name.toString.startsWith("Tuple") =>
-            a.productIterator.toStream.zipWithIndex
-              .map{ case (v, i) => "_" + (i + 1) -> v }
-              .toMap
-              .treeStringValue
+            a.view
+              .map(_.valueTreeString)
+              .map("- " + _.indent(2).trim)
+              .mkString("\n")
           case a : Product =>
             currentMirror.reflect(a).symbol.typeSignature.members.toStream
               .collect{ case a : TermSymbol => a }
@@ -187,16 +173,12 @@ object Sext {
               .map( f => f.symbol.name.toString.trim -> f.get )
               .reverse
               .as(collection.immutable.ListMap(_:_*))
-              .treeStringValue
-
+              .valueTreeString
           case null =>
             "null"
-          case a : String =>
-            '"' + a + '"'
           case _ =>
             a.toString
         }
-      }
   }
   implicit class AnyFunctional[ A ]( α : A ) {
 
