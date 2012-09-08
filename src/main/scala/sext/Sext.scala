@@ -151,6 +151,53 @@ object Sext {
         else None
       }
   }
+  implicit class AnyTreeString[ A ]( a : A ){
+    def treeStringValue
+      : String
+      = {
+        def indent ( a : String )
+          = a.lines.toStream match {
+              case h +: t =>
+                ( ("- " + h) +:
+                  t.map{"| " + _}
+                ) .mkString("\n")
+              case _ => ""
+            }
+        a match {
+          case a : Map[_, _] =>
+            a.view
+              .map{ case (k, v) => k + "\n" + v.treeStringValue }
+              .map{ indent }
+              .mkString("\n")
+          case a : Traversable[_] =>
+            a.toStream.zipWithIndex.map(_.swap).toMap.treeStringValue
+          case a : Product
+            if currentMirror.reflect(a).symbol.name.toString.startsWith("Tuple") =>
+            a.productIterator.toStream.zipWithIndex
+              .map{ case (v, i) => "_" + (i + 1) -> v }
+              .toMap
+              .treeStringValue
+          case a : Product =>
+            currentMirror.reflect(a).symbol.typeSignature.members.toStream
+              .collect{ case a : TermSymbol => a }
+              .filterNot(_.isMethod)
+              .filterNot(_.isModule)
+              .filterNot(_.isClass)
+              .map( currentMirror.reflect(a).reflectField )
+              .map( f => f.symbol.name.toString -> f.get )
+              .reverse
+              .as(collection.immutable.ListMap(_:_*))
+              .treeStringValue
+
+          case null =>
+            "null"
+          case a : String =>
+            '"' + a + '"'
+          case _ =>
+            a.toString
+        }
+      }
+  }
   implicit class AnyFunctional[ A ]( α : A ) {
 
     def unfold
