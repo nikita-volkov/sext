@@ -73,7 +73,7 @@ object Sext {
         def indent ( s : String )
           = s.lines.toStream match {
               case h +: t =>
-                ( ("- " + h) +: 
+                ( ("-  " + h) +:
                   t.map{"|  " + _}
                 ) .mkString("\n")
               case _ => ""
