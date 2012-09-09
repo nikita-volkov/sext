@@ -74,20 +74,20 @@ object Sext {
         x
       }
 
-    def prettyString
+    def treeString
       : String
       = {
         def indent ( s : String )
           = s.lines.toStream match {
               case h +: t =>
                 ( ("-  " + h) +: t.map{"|  " + _} ) mkString "\n"
-              case _ => ""
+              case _ => "-  "
             }
         x match {
           case x : Traversable[_] =>
             x.stringPrefix + ":\n" +
             x.view
-              .map{ _.prettyString }
+              .map{ _.treeString }
               .map{ indent }
               .mkString("\n")
           case x : Product if x.productArity == 0 =>
@@ -95,7 +95,7 @@ object Sext {
           case x : Product =>
             x.productPrefix + ":\n" +
             x.productIterator
-              .map{ _.prettyString }
+              .map{ _.treeString }
               .map{ indent }
               .mkString("\n")
           case null =>
@@ -127,7 +127,7 @@ object Sext {
         = if( s.isEmpty ) None else Some(s)
       def indent
         ( i : Int )
-        = prependLines(" " * i) 
+        = prependLines(" " * i)
       def prependLines
         ( p : String )
         = s.lines
@@ -163,8 +163,8 @@ object Sext {
           case (k, v) =>
             k.valueTreeString + "\n" +
             v.valueTreeString.prependLines("| ")
-          case a : Traversable[_] =>
-            a.view
+          case a : TraversableOnce[_] =>
+            a.toStream
               .map(_.valueTreeString)
               .map("- " + _.indent(2).trim)
               .mkString("\n")
