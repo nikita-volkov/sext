@@ -5,7 +5,7 @@ object Demo extends App {
   import sext.Sext._
 
   case class A(a: Int, b: String, c: Seq[A])
-  val a = A(1, "adsf", A(5, "oiweur", Nil) :: A(4, "", A(6, "dsf", Nil) :: Nil) :: A(9, "sdlfkjw", Nil) :: Nil)
+  val a = A(1, "adsf", A(5, "oiweur\nsadf", Nil) :: A(4, "", A(6, "dsf", Nil) :: Nil) :: A(9, "sdlfkjw", Nil) :: Nil)
   a.valueTreeString.trace()
 
   Map(
@@ -37,5 +37,8 @@ object Demo extends App {
       )
     )
   ).valueTreeString.trace()
+
+
+  ("lsdkfj\nsdljfdkslf\n   ldkf", 0, 3).valueTreeString.trace()
 
 }
