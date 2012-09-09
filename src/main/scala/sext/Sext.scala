@@ -74,37 +74,6 @@ object Sext {
         x
       }
 
-    def treeString
-      : String
-      = {
-        def indent ( s : String )
-          = s.lines.toStream match {
-              case h +: t =>
-                ( ("-  " + h) +: t.map{"|  " + _} ) mkString "\n"
-              case _ => "-  "
-            }
-        x match {
-          case x : Traversable[_] =>
-            x.stringPrefix + ":\n" +
-            x.view
-              .map{ _.treeString }
-              .map{ indent }
-              .mkString("\n")
-          case x : Product if x.productArity == 0 =>
-            x.productPrefix
-          case x : Product =>
-            x.productPrefix + ":\n" +
-            x.productIterator
-              .map{ _.treeString }
-              .map{ indent }
-              .mkString("\n")
-          case null =>
-            "null"
-          case _ =>
-            x.toString
-        }
-      }
-
     def trying
       [ ResultT ]
       ( f : A => ResultT )
@@ -157,16 +126,47 @@ object Sext {
       }
   }
   implicit class AnyTreeString[ A ]( a : A ){
+
+    private def indent ( s : String )
+      = s.lines.toStream match {
+          case h +: t =>
+            ( ("- " + h) +: t.map{"| " + _} ) mkString "\n"
+          case _ => "- "
+        }
+
+    def treeString
+      : String
+      = a match {
+          case x : Traversable[_] =>
+            x.stringPrefix + ":\n" +
+            x.view
+              .map{ _.treeString }
+              .map{ indent }
+              .mkString("\n")
+          case x : Product if x.productArity == 0 =>
+            x.productPrefix
+          case x : Product =>
+            x.productPrefix + ":\n" +
+            x.productIterator
+              .map{ _.treeString }
+              .map{ indent }
+              .mkString("\n")
+          case null =>
+            "null"
+          case _ =>
+            a.toString
+        }
+
     def valueTreeString
       : String
       = a match {
           case (k, v) =>
-            k.valueTreeString + "\n" +
-            v.valueTreeString.prependLines("| ")
+            k.valueTreeString + ":\n" +
+            v.valueTreeString
           case a : TraversableOnce[_] =>
             a.toStream
               .map(_.valueTreeString)
-              .map("- " + _.indent(2).trim)
+              .map(indent)
               .mkString("\n")
           case a : Product =>
             currentMirror.reflect(a).symbol.typeSignature.members.toStream
@@ -184,6 +184,7 @@ object Sext {
           case _ =>
             a.toString
         }
+
   }
   implicit class AnyFunctional[ A ]( α : A ) {
 
