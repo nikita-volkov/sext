@@ -3,6 +3,7 @@ package sext
 import util.Try
 import reflect.runtime.universe._
 import reflect.runtime.currentMirror
+import collection.GenTraversableOnce
 
 object Sext {
 
@@ -52,9 +53,12 @@ object Sext {
         case x: Float => x == 0f
         case x: Double => x == 0d
         case x: Product => x.productArity == 0
+        case x: GenTraversableOnce[_] => x.isEmpty
         case _ => false
       }
     }
+
+    def notNull = Option(x)
 
     def notEmpty =
       if (x.isEmpty) None else Some(x)
