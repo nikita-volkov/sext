@@ -129,7 +129,7 @@ object Sext {
         else None
       }
   }
-  implicit class AnyTreeString[ A ]( a : A ){
+  implicit class AnyTreeString[ A ]( val a : A ) extends AnyVal {
 
     private def indent ( s : String )
       = s.lines.toStream match {
@@ -190,7 +190,7 @@ object Sext {
         }
 
   }
-  implicit class AnyFunctional[ A ]( α : A ) {
+  implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {
 
     def unfold
       [ B ]
