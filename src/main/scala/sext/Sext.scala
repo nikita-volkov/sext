@@ -85,6 +85,10 @@ object Sext {
 
   }
 
+  /**
+   * Useful for wrapping the function and passing as lambda when partially applied
+   */
+  def trying[A, B] ( f : A => B )( a : A ) = a trying f
 
   implicit class OptionExtensions
     [ T ]
