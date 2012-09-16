@@ -72,9 +72,9 @@ object Sext {
       = if( p(x) ) Left(x)
         else Right(x)
 
-    def trace()
+    def trace[B]( f : A => B = {x : A => x} )
       = {
-        Console.println(x)
+        Console.println(f(x))
         x
       }
 
