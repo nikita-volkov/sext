@@ -21,7 +21,7 @@ class OrderedMap[A, B](
   def +[B1 >: B](kv: (A, B1)) =
     new OrderedMap(
       map + kv,
-      queue enqueue kv
+      if( map.contains(kv._1) ) queue else queue enqueue kv
     )
   def -(key: A) =
     new OrderedMap(
