@@ -226,4 +226,8 @@ object Sext {
 
   }
 
+  implicit class Tuple2Apply[ A, B ]( val a : (A, B) ) extends AnyVal {
+    def apply [C] ( f : (A, B) => C ) = f.tupled(a)
+  }
+
 }
