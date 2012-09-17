@@ -230,4 +230,10 @@ object Sext {
     def apply [C] ( f : (A, B) => C ) = f.tupled(a)
   }
 
+  def memo [ X, R ] ( f : X => R ) = {
+     // a WeakHashMap will release cache members if memory tightens
+     val cache = new collection.mutable.WeakHashMap[X, R]
+     x : X => cache.getOrElseUpdate( x, f(x) )
+  }
+
 }
