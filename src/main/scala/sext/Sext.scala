@@ -7,7 +7,7 @@ import collection.GenTraversableOnce
 
 object Sext {
 
-  implicit class MapExtensions[ K, V ](x : Map[ K, V ]) {
+  implicit class MapExtensions[ K, V ](val x : Map[ K, V ]) extends AnyVal {
     def filterValues(predicate: V => Boolean) =
       x.filter(pair => predicate(pair._2))
     def withValuesFilter(predicate: V => Boolean) =
