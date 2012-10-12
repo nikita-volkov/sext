@@ -5,7 +5,7 @@ import reflect.runtime.universe._
 import reflect.runtime.currentMirror
 import collection.GenTraversableOnce
 
-object Sext {
+object `package` {
 
   implicit class MapExtensions[ K, V ](val x : Map[ K, V ]) extends AnyVal {
     def filterValues(predicate: V => Boolean) =
