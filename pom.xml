@@ -7,23 +7,37 @@
   <groupId>com.github.nikita-volkov</groupId>
   <artifactId>sext</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+
+  <name>SExt</name>
+  <description>A small extensions library for Scala</description>
+  <url>http://www.github.com/nikita-volkov/sext</url>
+
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>http://www.github.com/nikita-volkov/sext/LICENSE</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>nikita-volkov</id>
+      <name>Nikita Volkov</name>
+      <email>nikita.y.volkov@mail.ru</email>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:nikita-volkov/sext.git</connection>
+    <url>scm:git:git@github.com:nikita-volkov/sext.git</url>
+    <developerConnection>scm:git:git@github.com:nikita-volkov/sext.git</developerConnection>
+  </scm>
 
   <dependencies>
     <dependency>
-      <groupId>com.weiglewilczek.slf4s</groupId>
-      <artifactId>slf4s_2.9.1</artifactId>
-      <version>1.0.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.6.6</version>
-    </dependency>
-    <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.10.0-M7</artifactId>
-      <version>1.9-2.10.0-M7-B1</version>
+      <version>2.0.M4-2.10.0-M7-B1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -48,52 +62,6 @@
       <version>2.10.0-M7</version>
     </dependency>
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>scala-releases</id>
-      <url>http://scala-tools.org/repo-releases</url>
-    </repository>
-    <repository>
-      <id>scala-snapshots</id>
-      <url>http://scala-tools.org/repo-snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>typesafe</id>
-      <url>http://typesafe.artifactoryonline.com/typesafe/repo</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>scala-tools.org</id>
-      <url>http://scala-tools.org/repo-releases</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>scala-snapshots</id>
-      <url>http://scala-tools.org/repo-snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>typesafe</id>
-      <url>http://typesafe.artifactoryonline.com/typesafe/repo</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
 
   <build>
     <plugins>
