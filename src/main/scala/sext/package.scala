@@ -206,6 +206,39 @@ object `package` {
     @inline def $$ [ Z ] ( f : (A, B, C) => Z ) = f.tupled(a)
   }
 
+  implicit class Tuple4Zipped
+    [ A, B, C, D ]
+    ( val t : (Iterable[A], Iterable[B], Iterable[C], Iterable[D]) )
+    extends AnyVal
+    {
+      def zipped
+        = t._1.toStream
+            .zip(t._2).zip(t._3).zip(t._4)
+            .map{ case (((a, b), c), d) => (a, b, c, d) }
+    }
+
+  implicit class IterableUnzip4
+    [ A, B, C, D ]
+    ( val ts : Iterable[(A, B, C, D)] )
+    extends AnyVal
+    {
+      def unzip4
+        = {
+          import collection.mutable.ListBuffer
+          val as = ListBuffer[A]()
+          val bs = ListBuffer[B]()
+          val cs = ListBuffer[C]()
+          val ds = ListBuffer[D]()
+          ts.foreach{ case (a, b, c, d) =>
+            as += a
+            bs += b
+            cs += c
+            ds += d
+          }
+          (as.toList, bs.toList, cs.toList, ds.toList)
+        }
+    }
+    
   /**
    * Useful for wrapping the function and passing as lambda when partially applied
    */
