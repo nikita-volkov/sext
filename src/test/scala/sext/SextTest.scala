@@ -8,6 +8,10 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class SextTest extends FunSuite with ShouldMatchers {
   import SextTest._
+  test("zipBy preserves root type"){
+    Seq(1,2,3).zipBy(_ + 3).isInstanceOf[Seq[_]] $ assert
+    Set(1,2,3).zipBy(_ + 3).isInstanceOf[Set[_]] $ assert
+  }
   test("mapKeys") {
     Map("b" -> 1, "c" -> 4, "a" -> 9).mapKeys(_ + "1") should
     equal(Map("b1" -> 1, "c1" -> 4, "a1" -> 9))
