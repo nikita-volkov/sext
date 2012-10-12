@@ -76,18 +76,6 @@ object `package` {
 
   }
 
-  /**
-   * Useful for wrapping the function and passing as lambda when partially applied
-   */
-  def trying[A, B] ( f : A => B )( a : A ) = a trying f
-
-  implicit class OptionExtensions
-    [ T ]
-    ( option : Option[_])
-    {
-      def +: ( x : T ) = Option(x)
-    }
-
   implicit class StringExtensions
     ( s : String )
     {
@@ -217,9 +205,11 @@ object `package` {
 
   }
 
-  implicit class Tuple2Apply[ A, B ]( val a : (A, B) ) extends AnyVal {
-    def apply [C] ( f : (A, B) => C ) = f.tupled(a)
-  }
+
+  /**
+   * Useful for wrapping the function and passing as lambda when partially applied
+   */
+  def trying[A, B] ( f : A => B )( a : A ) = a trying f
 
   def memo [ X, R ] ( f : X => R ) = {
      // a WeakHashMap will release cache members if memory tightens
