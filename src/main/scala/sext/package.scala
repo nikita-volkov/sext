@@ -7,7 +7,7 @@ import collection.GenTraversableOnce
 
 object `package` {
 
-  implicit class MapExtensions[ K, V ](val x : Map[ K, V ]) extends AnyVal {
+  implicit class MapExtensions [ K, V ] ( val x : Map[ K, V ] ) extends AnyVal {
     def filterValues(predicate: V => Boolean) =
       x.filter(pair => predicate(pair._2))
     def withValuesFilter(predicate: V => Boolean) =
@@ -26,23 +26,19 @@ object `package` {
       def zipBy
         [ ResultItemT,
           ResultT ]
-        ( f : ItemT ⇒ ResultItemT )
         ( implicit bf : CanBuildFrom[TraversableT[ItemT], (ItemT, ResultItemT), ResultT] )
+        ( f : ItemT => ResultItemT )
         : ResultT
         = traversable.map(x ⇒ x → f(x)).asInstanceOf[ResultT]
     }
 
   implicit class AnyExtensions[A](x: A) {
-    def tap[ResultT](f: A => ResultT) = {
-      f(x)
-      x
-    }
+    def tap[ResultT](f: A => ResultT) = { f(x); x }
 
-    def as[ResultT](f: A => ResultT) =
-      f(x)
+    def as[ResultT](f: A => ResultT) = f(x)
 
-    def isEmpty = {
-      x match {
+    def isEmpty
+      = x match {
         case null | () => true
         case x: Boolean => !x
         case x: Byte => x == 0.toByte
@@ -56,15 +52,13 @@ object `package` {
         case x: GenTraversableOnce[_] => x.isEmpty
         case _ => false
       }
-    }
 
     def notNull = Option(x)
 
-    def notEmpty =
-      if (x.isEmpty) None else Some(x)
+    def notEmpty = if (x.isEmpty) None else Some(x)
 
-    def satisfying(p: A => Boolean): Option[A] =
-      if (p(x)) Some(x) else None
+    def satisfying(p: A => Boolean) : Option[A]
+      = if (p(x)) Some(x) else None
 
     def satisfying1
       ( p : A => Boolean )
@@ -72,11 +66,8 @@ object `package` {
       = if( p(x) ) Left(x)
         else Right(x)
 
-    def trace[B]( f : A => B = {x : A => x} )
-      = {
-        Console.println(f(x))
-        x
-      }
+    def trace [ B ] ( f : A => B = (x : A) => x.treeString )
+      = { Console.println(f(x)); x }
 
     def trying
       [ ResultT ]
