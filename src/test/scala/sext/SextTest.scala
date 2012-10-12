@@ -9,8 +9,8 @@ import org.scalatest.junit.JUnitRunner
 class SextTest extends FunSuite with ShouldMatchers {
   import SextTest._
   test("zipBy preserves root type"){
-    Seq(1,2,3).zipBy(_ + 3).isInstanceOf[Seq[_]] $ assert
-    Set(1,2,3).zipBy(_ + 3).isInstanceOf[Set[_]] $ assert
+    Seq(1,2,3).zipBy(_ + 3) should beInstanceOf[Seq[_]]
+    Seq(1,2,3).zipBy(_ + 3) should not (beInstanceOf[Set[_]])
   }
   test("mapKeys") {
     Map("b" -> 1, "c" -> 4, "a" -> 9).mapKeys(_ + "1") should
@@ -37,4 +37,16 @@ class SextTest extends FunSuite with ShouldMatchers {
 object SextTest {
   trait A
   trait B
+
+  import org.scalatest.matchers._
+  import reflect._
+  def beInstanceOf [A : ClassTag]
+    = Matcher { x : Any =>
+        MatchResult(
+          classTag[A].runtimeClass.isAssignableFrom(x.getClass),
+          x.getClass + " is not an instance of " + classTag[A].runtimeClass,
+          x.getClass + " is an instance of " + classTag[A].runtimeClass
+        )
+      }
+
 }
