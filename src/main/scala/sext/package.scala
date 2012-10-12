@@ -17,19 +17,11 @@ object `package` {
   }
 
   implicit class TraversableExtensions
-    [ ItemT,
-      TraversableT[ItemT] <: Traversable[ItemT] ]
-    ( traversable : TraversableT[ItemT] )
+    [ A, B[A] <: Traversable[A] ]
+    ( a : B[A] )
     {
-      import collection.generic.CanBuildFrom
-
-      def zipBy
-        [ ResultItemT,
-          ResultT ]
-        ( implicit bf : CanBuildFrom[TraversableT[ItemT], (ItemT, ResultItemT), ResultT] )
-        ( f : ItemT => ResultItemT )
-        : ResultT
-        = traversable.map(x ⇒ x → f(x)).asInstanceOf[ResultT]
+      def zipBy [C] ( f : A => C ) : B[(A, C)]
+        = a.map(x => x -> f(x)).asInstanceOf[B[(A, C)]]
     }
 
   implicit class AnyExtensions[A](x: A) {
