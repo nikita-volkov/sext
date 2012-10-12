@@ -26,9 +26,9 @@ object `package` {
     }
 
   implicit class AnyExtensions [ A ] ( val x : A ) extends AnyVal {
-    def tap[ResultT](f: A => ResultT) = { f(x); x }
+    def tap [ B ] ( f : A => B ) = { f(x); x }
 
-    def as[ResultT](f: A => ResultT) = f(x)
+    def as [ B ] ( f : A => B ) = f(x)
 
     def isEmpty
       = x match {
@@ -62,10 +62,7 @@ object `package` {
     def trace [ B ] ( f : A => B = (x : A) => x.treeString )
       = { Console.println(f(x)); x }
 
-    def trying
-      [ ResultT ]
-      ( f : A => ResultT )
-      = Try(f(x)).toOption
+    def trying [ B ] ( f : A => B ) = Try(f(x)).toOption
 
   }
 
@@ -199,20 +196,20 @@ object `package` {
 
   }
 
-  implicit class Any$ [A] ( val a : A ) extends AnyVal {
-    @inline def $ [ResultT] ( f : A => ResultT ) = f(a)
+  implicit class Any$ [ A ] ( val a : A ) extends AnyVal {
+    @inline def $ [ Z ] ( f : A => Z ) = f(a)
   }
-  implicit class Tuple2$$ [A, B] ( val a : (A, B) ) extends AnyVal {
-    @inline def $$ [Z] ( f : (A, B) => Z ) = f.tupled(a)
+  implicit class Tuple2$$ [ A, B ] ( val a : (A, B) ) extends AnyVal {
+    @inline def $$ [ Z ] ( f : (A, B) => Z ) = f.tupled(a)
   }
-  implicit class Tuple3$$ [A, B, C] ( val a : (A, B, C) ) extends AnyVal {
-    @inline def $$ [Z] ( f : (A, B, C) => Z ) = f.tupled(a)
+  implicit class Tuple3$$ [ A, B, C ] ( val a : (A, B, C) ) extends AnyVal {
+    @inline def $$ [ Z ] ( f : (A, B, C) => Z ) = f.tupled(a)
   }
 
   /**
    * Useful for wrapping the function and passing as lambda when partially applied
    */
-  def trying[A, B] ( f : A => B )( a : A ) = a trying f
+  def trying [ A, B ] ( f : A => B ) ( a : A ) = a trying f
 
   def memo [ X, R ] ( f : X => R ) = {
      // a WeakHashMap will release cache members if memory tightens
