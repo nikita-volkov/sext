@@ -18,13 +18,14 @@ object `package` {
 
   implicit class TraversableExtensions
     [ A, B[A] <: Traversable[A] ]
-    ( a : B[A] )
+    ( val a : B[A] )
+    extends AnyVal
     {
       def zipBy [C] ( f : A => C ) : B[(A, C)]
         = a.map(x => x -> f(x)).asInstanceOf[B[(A, C)]]
     }
 
-  implicit class AnyExtensions[A](x: A) {
+  implicit class AnyExtensions [ A ] ( val x : A ) extends AnyVal {
     def tap[ResultT](f: A => ResultT) = { f(x); x }
 
     def as[ResultT](f: A => ResultT) = f(x)
@@ -69,7 +70,8 @@ object `package` {
   }
 
   implicit class StringExtensions
-    ( s : String )
+    ( val s : String )
+    extends AnyVal
     {
       def notEmpty
         = if( s.isEmpty ) None else Some(s)
@@ -104,7 +106,7 @@ object `package` {
         else None
       }
   }
-  implicit class AnyTreeString[ A ]( a : A ) {
+  implicit class AnyTreeString [ A ] ( val a : A ) extends AnyVal {
 
     private def indent ( s : String )
       = s.lines.toStream match {
@@ -165,7 +167,7 @@ object `package` {
         }
 
   }
-  implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {
+  implicit class AnyFunctional [ A ] ( val α : A ) extends AnyVal {
 
     def unfold
       [ B ]
