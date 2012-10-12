@@ -205,6 +205,15 @@ object `package` {
 
   }
 
+  implicit class Any$ [A] ( val a : A ) extends AnyVal {
+    @inline def $ [ResultT] ( f : A => ResultT ) = f(a)
+  }
+  implicit class Tuple2$$ [A, B] ( val a : (A, B) ) extends AnyVal {
+    @inline def $$ [Z] ( f : (A, B) => Z ) = f.tupled(a)
+  }
+  implicit class Tuple3$$ [A, B, C] ( val a : (A, B, C) ) extends AnyVal {
+    @inline def $$ [Z] ( f : (A, B, C) => Z ) = f.tupled(a)
+  }
 
   /**
    * Useful for wrapping the function and passing as lambda when partially applied
