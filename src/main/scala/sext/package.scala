@@ -103,7 +103,7 @@ object `package` {
         else None
       }
   }
-  implicit class AnyTreeString [ A ] ( val a : A ) extends AnyVal {
+  implicit class AnyTreeString [ A ] ( a : A ) {
 
     private def indent ( s : String )
       = s.lines.toStream match {
