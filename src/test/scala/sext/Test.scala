@@ -6,8 +6,8 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class SextTest extends FunSuite with ShouldMatchers {
-  import SextTest._
+class Test extends FunSuite with ShouldMatchers {
+  import Test._
   test("zipBy preserves root type"){
     Seq(1,2,3).zipBy(_ + 3) should beInstanceOf[Seq[_]]
     Seq(1,2,3).zipBy(_ + 3) should not (beInstanceOf[Set[_]])
@@ -34,7 +34,7 @@ class SextTest extends FunSuite with ShouldMatchers {
       .should( have size (2) )
   }
 }
-object SextTest {
+object Test {
   trait A
   trait B
 
