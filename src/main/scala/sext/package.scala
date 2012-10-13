@@ -223,20 +223,9 @@ object `package` {
     extends AnyVal
     {
       def unzip4
-        = {
-          import collection.mutable.ListBuffer
-          val as = ListBuffer[A]()
-          val bs = ListBuffer[B]()
-          val cs = ListBuffer[C]()
-          val ds = ListBuffer[D]()
-          ts.foreach{ case (a, b, c, d) =>
-            as += a
-            bs += b
-            cs += c
-            ds += d
-          }
-          (as.toList, bs.toList, cs.toList, ds.toList)
-        }
+        = ts.foldRight((List[A](), List[B](), List[C](), List[D]()))(
+            (a, z) => (a._1 +: z._1, a._2 +: z._2, a._3 +: z._3, a._4 +: z._4)
+          )
     }
     
   /**
