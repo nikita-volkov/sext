@@ -8,6 +8,16 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class Test extends FunSuite with ShouldMatchers {
   import Test._
+  test("Tuple4 zipped and unzip4"){
+    val as = List("a1", "a2", "a3")
+    val bs = List("b1", "b2", "b3")
+    val cs = List("c1", "c2", "c3")
+    val ds = List("d1", "d2", "d3")
+
+    
+    (as, bs, cs, ds).zipped.filterNot(_._1 == "a2").unzip4 should equal ( (List("a1", "a3"), List("b1", "b3"), List("c1", "c3"), List("d1", "d3")) )
+
+  }
   test("zipBy preserves root type"){
     Seq(1,2,3).zipBy(_ + 3) should beInstanceOf[Seq[_]]
     Seq(1,2,3).zipBy(_ + 3) should not (beInstanceOf[Set[_]])
