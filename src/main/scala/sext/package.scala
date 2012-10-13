@@ -7,7 +7,7 @@ import collection.GenTraversableOnce
 
 object `package` {
 
-  implicit class MapExtensions [ K, V ] ( val x : Map[ K, V ] ) extends AnyVal {
+  implicit class SextMap [ K, V ] ( val x : Map[ K, V ] ) extends AnyVal {
     def filterValues(predicate: V => Boolean) =
       x.filter(pair => predicate(pair._2))
     def withValuesFilter(predicate: V => Boolean) =
@@ -16,7 +16,7 @@ object `package` {
       x.map(pair => f(pair._1) -> pair._2)
   }
 
-  implicit class TraversableExtensions
+  implicit class SextTraversable
     [ A, B[A] <: Traversable[A] ]
     ( val a : B[A] )
     extends AnyVal
@@ -25,7 +25,7 @@ object `package` {
         = a.map(x => x -> f(x)).asInstanceOf[B[(A, C)]]
     }
 
-  implicit class AnyExtensions [ A ] ( val x : A ) extends AnyVal {
+  implicit class SextAny [ A ] ( val x : A ) extends AnyVal {
     def tap [ B ] ( f : A => B ) = { f(x); x }
 
     def as [ B ] ( f : A => B ) = f(x)
@@ -66,7 +66,7 @@ object `package` {
 
   }
 
-  implicit class StringExtensions
+  implicit class SextString
     ( val s : String )
     extends AnyVal
     {
@@ -91,7 +91,7 @@ object `package` {
               (a, b.drop(splitter.size))
           }
     }
-  implicit class AnyInstanceOf[ A : TypeTag ]( x : A ) {
+  implicit class AnyToInstanceOf[ A : TypeTag ]( x : A ) {
     def toInstanceOf[ T : TypeTag ] : Option[T]
       = {
         def test
