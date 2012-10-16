@@ -4,12 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
-
   <groupId>com.github.nikita-volkov</groupId>
   <artifactId>sext</artifactId>
   <version>0.1.1-SNAPSHOT</version>
@@ -39,6 +33,12 @@
     <url>scm:git:git@github.com:nikita-volkov/sext.git</url>
     <developerConnection>scm:git:git@github.com:nikita-volkov/sext.git</developerConnection>
   </scm>
+
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
 
   <dependencies>
     <dependency>
@@ -133,7 +133,6 @@
         </executions>
       </plugin>
     </plugins>
-
   </build>
 
 </project>
