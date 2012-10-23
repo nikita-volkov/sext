@@ -169,35 +169,35 @@ object `package` {
         }
 
   }
-  implicit class AnyFunctional [ A ] ( val α : A ) extends AnyVal {
+  implicit class AnyFunctional [ A ] ( val a : A ) extends AnyVal {
 
     def unfold
       [ B ]
-      ( ƒ : A => Option[(B, A)] )
+      ( f : A => Option[(B, A)] )
       : Stream[B]
-      = ƒ(α) map {case (β, α) ⇒ β #:: (α unfold ƒ)} getOrElse Stream()    
+      = f(a) map {case (b, a) ⇒ b #:: (a unfold f)} getOrElse Stream()    
 
     def unfold1
-      ( ƒ : A => Option[A] )
+      ( f : A => Option[A] )
       : Stream[A]
-      = ƒ(α) map (α ⇒ α #:: (α unfold1 ƒ)) getOrElse Stream()
+      = f(a) map (a ⇒ a #:: (a unfold1 f)) getOrElse Stream()
 
     def iterate
-      ( ƒ : A => A )
+      ( f : A => A )
       : Stream[A]
-      = α #:: (ƒ(α) iterate ƒ)
+      = a #:: (f(a) iterate f)
 
     def foldTo
       [ B ]
-      ( σ : Traversable[B] )
-      ( ƒ : (B, A) ⇒ A)
-      = (σ foldRight α)(ƒ)
+      ( b : Traversable[B] )
+      ( f : (B, A) ⇒ A)
+      = (b foldRight a)(f)
 
     def foldFrom
       [ B ]
-      ( σ : Traversable[B] )
-      ( ƒ : (A, B) ⇒ A)
-      = (σ foldLeft α)(ƒ)
+      ( b : Traversable[B] )
+      ( f : (A, B) ⇒ A)
+      = (b foldLeft a)(f)
 
   }
 
