@@ -91,6 +91,11 @@ object `package` {
               (a, b.drop(splitter.size))
           }
     }
+
+  implicit class SextBoolean ( val a : Boolean ) extends AnyVal {
+    def option [ A ] ( b : A ) : Option[A] = if( a ) Some(b) else None
+  }
+
   implicit class AnyToInstanceOf[ A : TypeTag ]( x : A ) {
     def toInstanceOf[ T : TypeTag ] : Option[T]
       = {
