@@ -201,16 +201,6 @@ object `package` {
 
   }
 
-  implicit class Any$ [ A ] ( val a : A ) extends AnyVal {
-    @inline def $ [ Z ] ( f : A => Z ) = f(a)
-  }
-  implicit class Tuple2$$ [ A, B ] ( val a : (A, B) ) extends AnyVal {
-    @inline def $$ [ Z ] ( f : (A, B) => Z ) = f.tupled(a)
-  }
-  implicit class Tuple3$$ [ A, B, C ] ( val a : (A, B, C) ) extends AnyVal {
-    @inline def $$ [ Z ] ( f : (A, B, C) => Z ) = f.tupled(a)
-  }
-
   implicit class Tuple4Zipped
     [ A, B, C, D ]
     ( val t : (Iterable[A], Iterable[B], Iterable[C], Iterable[D]) )
