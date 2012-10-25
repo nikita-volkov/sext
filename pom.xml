@@ -42,6 +42,22 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.github.nikita-volkov</groupId>
+      <artifactId>embrace</artifactId>
+      <version>0.1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.joda</groupId>
+      <artifactId>joda-convert</artifactId>
+      <version>1.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.10.0-RC1</artifactId>
       <version>2.0.M4-2.10.0-RC1-B1</version>
