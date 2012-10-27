@@ -8,13 +8,13 @@ import collection.GenTraversableOnce
 
 object `package` {
 
-  implicit class SextMap [ K, V ] ( val x : Map[ K, V ] ) extends AnyVal {
-    def filterValues(predicate: V => Boolean) =
-      x.filter(pair => predicate(pair._2))
-    def withValuesFilter(predicate: V => Boolean) =
-      x.withFilter(pair => predicate(pair._2))
-    def mapKeys[K2](f: K => K2) =
-      x.map(pair => f(pair._1) -> pair._2)
+  implicit class SextMap [ A, B ] ( val a : Map[ A, B ] ) extends AnyVal {
+    def filterValues(predicate: B => Boolean)
+      = a.filter(pair => predicate(pair._2))
+    def withValuesFilter(predicate: B => Boolean)
+      = a.withFilter(pair => predicate(pair._2))
+    def mapKeys[Z](f: A => Z)
+      = a.map(pair => f(pair._1) -> pair._2)
   }
 
   implicit class SextTraversable
