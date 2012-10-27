@@ -1,7 +1,5 @@
 package sext
 
-import embrace._
-
 /**
  * Utilities for command-line applications
  */
@@ -12,12 +10,11 @@ object Cli {
    * Sample usage:
    *
    * @example {{{
-   *   val (intArg, longArg, stringArg)
-   *     = Cli.parseArgs(args, Seq("1", "100", "someString")){
-   *         case Array(a, b, c) => (a.toInt, b.toLong, c)
-   *       }
+   *   val (intArg, longArg, stringArg) = Cli.parseArgs(args, Seq("1", "100", "someString")){ 
+   *       case Array(a, b, c) => (a.toInt, b.toLong, c)
+   *     }
    * }}}
-   * @param args The value of [[scala.App#args]] field
+   * @param args The value of `args` field provided by [[scala.App]]
    * @param defaults Default values for unspecified args
    * @param process A function which will process a complete list of args with defaults provided for skipped args
    * @tparam Z Result of `process` function
@@ -30,7 +27,7 @@ object Cli {
     ( process  : Array[String] => Z )
     : Z
     = if( args.length <= defaults.length )
-        (args ++ defaults.drop(args.length)) $ process
+        process(args ++ defaults.drop(args.length))
       else 
         throw new Exception("Too many args")
 

@@ -7,13 +7,13 @@ import collection.GenTraversableOnce
 
 object `package` {
 
-  implicit class SextMap [ K, V ] ( val x : Map[ K, V ] ) extends AnyVal {
-    def filterValues(predicate: V => Boolean) =
-      x.filter(pair => predicate(pair._2))
-    def withValuesFilter(predicate: V => Boolean) =
-      x.withFilter(pair => predicate(pair._2))
-    def mapKeys[K2](f: K => K2) =
-      x.map(pair => f(pair._1) -> pair._2)
+  implicit class SextMap [ A, B ] ( val a : Map[ A, B ] ) extends AnyVal {
+    def filterValues(predicate: B => Boolean)
+      = a.filter(pair => predicate(pair._2))
+    def withValuesFilter(predicate: B => Boolean)
+      = a.withFilter(pair => predicate(pair._2))
+    def mapKeys[Z](f: A => Z)
+      = a.map(pair => f(pair._1) -> pair._2)
   }
 
   implicit class SextTraversable
@@ -21,18 +21,19 @@ object `package` {
     ( val a : B[A] )
     extends AnyVal
     {
-      def zipBy [C] ( f : A => C ) : B[(A, C)]
-        = a.map(x => x -> f(x)).asInstanceOf[B[(A, C)]]
+      def zipBy [ Z ] ( f : A => Z ) : B[(A, Z)]
+        = a.map(x => x -> f(x)).asInstanceOf[B[(A, Z)]]
     }
 
   implicit class SextAny [ A ] ( val a : A ) extends AnyVal {
-    def tap [ B ] ( f : A => B ) = { f(a); a }
+    def tap [ Z ] ( f : A => Z ) = { f(a); a }
 
-    def as [ B ] ( f : A => B ) = f(a)
-
-    def isEmpty
+    /**
+     * Is the value empty. Equivalent to monoid zero.
+     */
+    def isEmpty : Boolean
       = a match {
-        case null | () => true
+        case null => true
         case x: Boolean => !x
         case x: Byte => x == 0.toByte
         case x: Short => x == 0.toShort
@@ -41,7 +42,7 @@ object `package` {
         case x: Long => x == 0l
         case x: Float => x == 0f
         case x: Double => x == 0d
-        case x: Product => x.productArity == 0
+        case x: Product => x.productIterator.forall(_.isEmpty)
         case x: GenTraversableOnce[_] => x.isEmpty
         case _ => false
       }
@@ -53,27 +54,21 @@ object `package` {
     def satisfying(p: A => Boolean) : Option[A]
       = if (p(a)) Some(a) else None
 
-    def satisfying1
-      ( p : A => Boolean )
-      : Either[A, A]
-      = if( p(a) ) Left(a)
-        else Right(a)
-
-    def trace [ B ] ( f : A => B = (x : A) => x.treeString )
+    def trace [ Z ] ( f : A => Z = (x : A) => x.treeString )
       = { Console.println(f(a)); a }
 
-    def trying [ B ] ( f : A => B ) = Try(f(a)).toOption
+    def trying [ Z ] ( f : A => Z ) = Try(f(a)).toOption
 
     def unfold
-      [ B ]
-      ( f : A => Option[(B, A)] )
-      : Stream[B]
-      = f(a) map {case (b, a) ⇒ b #:: (a unfold f)} getOrElse Stream()
+      [ Z ]
+      ( f : A => Option[(Z, A)] )
+      : Stream[Z]
+      = f(a) map {case (b, a) => b #:: (a unfold f)} getOrElse Stream()
 
     def unfold1
       ( f : A => Option[A] )
       : Stream[A]
-      = f(a) map (a ⇒ a #:: (a unfold1 f)) getOrElse Stream()
+      = f(a) map (a => a #:: (a unfold1 f)) getOrElse Stream()
 
     def iterate
       ( f : A => A )
@@ -81,20 +76,25 @@ object `package` {
       = a #:: (f(a) iterate f)
 
     def foldTo
-      [ B ]
-      ( b : Traversable[B] )
-      ( f : (B, A) ⇒ A)
+      [ Z ]
+      ( b : Traversable[Z] )
+      ( f : (Z, A) => A)
       = (b foldRight a)(f)
 
     def foldFrom
-      [ B ]
-      ( b : Traversable[B] )
-      ( f : (A, B) ⇒ A)
+      [ Z ]
+      ( b : Traversable[Z] )
+      ( f : (A, Z) => A)
       = (b foldLeft a)(f)
 
   }
 
   implicit class SextAnyToInstanceOf[ A : TypeTag ]( x : A ) {
+    /**
+     * Get an option of this value as of instance of type `T`
+     * @tparam T A type to see this value as
+     * @return `Some(a)` if `a` is an instance of `T` and `None` otherwise
+     */
     def toInstanceOf[ T : TypeTag ] : Option[T]
       = {
         def test
@@ -115,6 +115,9 @@ object `package` {
           case _ => "- "
         }
 
+    /**
+     * @return A readable string representation of this value
+     */
     def treeString
       : String
       = a match {
@@ -138,6 +141,9 @@ object `package` {
             a.toString
         }
 
+    /**
+     * @return A readable string representation of this value of a different format to `treeString`
+     */
     def valueTreeString
       : String
       = a match {
@@ -150,16 +156,16 @@ object `package` {
               .map(indent)
               .mkString("\n")
           case a : Product =>
-            currentMirror.reflect(a).symbol.typeSignature.members.toStream
-              .collect{ case a : TermSymbol => a }
-              .filterNot(_.isMethod)
-              .filterNot(_.isModule)
-              .filterNot(_.isClass)
-              .map( currentMirror.reflect(a).reflectField )
-              .map( f => f.symbol.name.toString.trim -> f.get )
-              .reverse
-              .as(collection.immutable.ListMap(_:_*))
-              .valueTreeString
+            val b
+              = currentMirror.reflect(a).symbol.typeSignature.members.toStream
+                  .collect{ case a : TermSymbol => a }
+                  .filterNot(_.isMethod)
+                  .filterNot(_.isModule)
+                  .filterNot(_.isClass)
+                  .map( currentMirror.reflect(a).reflectField )
+                  .map( f => f.symbol.name.toString.trim -> f.get )
+                  .reverse
+            collection.immutable.ListMap(b: _*).valueTreeString
           case null =>
             "null"
           case _ =>
@@ -188,14 +194,12 @@ object `package` {
         : (String, String)
         = s.indexOf(splitter) match {
             case -1 => (s, "")
-            case i =>
-              val (a, b) = s.splitAt(i)
-              (a, b.drop(splitter.size))
+            case i => s.splitAt(i) match { case (a, b) => (a, b.drop(splitter.size)) }
           }
     }
 
   implicit class SextBoolean ( val a : Boolean ) extends AnyVal {
-    def option [ A ] ( b : A ) : Option[A] = if( a ) Some(b) else None
+    def option [ Z ] ( b : Z ) : Option[Z] = if( a ) Some(b) else None
   }
 
   implicit class SextTuple4
@@ -221,14 +225,14 @@ object `package` {
     }
     
   /**
-   * Useful for wrapping the function and passing as lambda when partially applied
+   * Useful for wrapping a function and passing as lambda when partially applied
    */
-  def trying [ A, B ] ( f : A => B ) ( a : A ) = a trying f
+  def trying [ A, Z ] ( f : A => Z ) ( a : A ) = a trying f
 
-  def memo [ X, R ] ( f : X => R ) = {
+  def memo [ A, Z ] ( f : A => Z ) = {
      // a WeakHashMap will release cache members if memory tightens
-     val cache = new collection.mutable.WeakHashMap[X, R]
-     x : X => cache.getOrElseUpdate( x, f(x) )
+     val cache = new collection.mutable.WeakHashMap[A, Z]
+     x : A => cache.getOrElseUpdate( x, f(x) )
   }
 
 }
