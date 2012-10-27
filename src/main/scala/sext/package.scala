@@ -1,6 +1,5 @@
 package sext
 
-import embrace._
 import util.Try
 import reflect.runtime.universe._
 import reflect.runtime.currentMirror
@@ -157,16 +156,16 @@ object `package` {
               .map(indent)
               .mkString("\n")
           case a : Product =>
-            currentMirror.reflect(a).symbol.typeSignature.members.toStream
-              .collect{ case a : TermSymbol => a }
-              .filterNot(_.isMethod)
-              .filterNot(_.isModule)
-              .filterNot(_.isClass)
-              .map( currentMirror.reflect(a).reflectField )
-              .map( f => f.symbol.name.toString.trim -> f.get )
-              .reverse
-              .$(collection.immutable.ListMap(_:_*))
-              .valueTreeString
+            val b
+              = currentMirror.reflect(a).symbol.typeSignature.members.toStream
+                  .collect{ case a : TermSymbol => a }
+                  .filterNot(_.isMethod)
+                  .filterNot(_.isModule)
+                  .filterNot(_.isClass)
+                  .map( currentMirror.reflect(a).reflectField )
+                  .map( f => f.symbol.name.toString.trim -> f.get )
+                  .reverse
+            collection.immutable.ListMap(b: _*).valueTreeString
           case null =>
             "null"
           case _ =>

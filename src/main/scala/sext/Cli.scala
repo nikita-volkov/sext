@@ -1,7 +1,5 @@
 package sext
 
-import embrace._
-
 /**
  * Utilities for command-line applications
  */
@@ -30,7 +28,7 @@ object Cli {
     ( process  : Array[String] => Z )
     : Z
     = if( args.length <= defaults.length )
-        (args ++ defaults.drop(args.length)) $ process
+        process(args ++ defaults.drop(args.length))
       else 
         throw new Exception("Too many args")
 

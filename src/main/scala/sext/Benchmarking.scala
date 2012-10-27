@@ -1,7 +1,5 @@
 package sext
 
-import embrace._
-
 object Benchmarking {
 
   /**
@@ -25,7 +23,7 @@ object Benchmarking {
    * @return Result of the executed function
    */
   def benchmarkAndPrint [Z] ( label : String ) ( f : => Z ) : Z
-    = benchmark(f) $$ {case (r, p) => println(label + ": " + p); r}
+    = benchmark(f) match {case (r, p) => println(label + ": " + p); r}
   /**
    * Execute and get result of function `f` while executing a function `g` on nanoseconds it took to execute function `f`
    * @param g Function on nanoseconds
@@ -34,6 +32,6 @@ object Benchmarking {
    * @return Result of function `f`
    */
   def benchmarkDoing [Z] ( g : Long => Unit ) ( f : => Z ) : Z
-    = benchmark(f) $$ {case (r, p) => g(p); r}
+    = benchmark(f) match {case (r, p) => g(p); r}
 
 }
