@@ -64,12 +64,12 @@ object `package` {
       [ Z ]
       ( f : A => Option[(Z, A)] )
       : Stream[Z]
-      = f(a) map {case (b, a) ⇒ b #:: (a unfold f)} getOrElse Stream()
+      = f(a) map {case (b, a) => b #:: (a unfold f)} getOrElse Stream()
 
     def unfold1
       ( f : A => Option[A] )
       : Stream[A]
-      = f(a) map (a ⇒ a #:: (a unfold1 f)) getOrElse Stream()
+      = f(a) map (a => a #:: (a unfold1 f)) getOrElse Stream()
 
     def iterate
       ( f : A => A )
@@ -79,13 +79,13 @@ object `package` {
     def foldTo
       [ Z ]
       ( b : Traversable[Z] )
-      ( f : (Z, A) ⇒ A)
+      ( f : (Z, A) => A)
       = (b foldRight a)(f)
 
     def foldFrom
       [ Z ]
       ( b : Traversable[Z] )
-      ( f : (A, Z) ⇒ A)
+      ( f : (A, Z) => A)
       = (b foldLeft a)(f)
 
   }
