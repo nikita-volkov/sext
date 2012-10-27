@@ -53,12 +53,6 @@ object `package` {
     def satisfying(p: A => Boolean) : Option[A]
       = if (p(a)) Some(a) else None
 
-    def satisfying1
-      ( p : A => Boolean )
-      : Either[A, A]
-      = if( p(a) ) Left(a)
-        else Right(a)
-
     def trace [ B ] ( f : A => B = (x : A) => x.treeString )
       = { Console.println(f(a)); a }
 
