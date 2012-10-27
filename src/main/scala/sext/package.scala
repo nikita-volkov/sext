@@ -29,9 +29,9 @@ object `package` {
   implicit class SextAny [ A ] ( val a : A ) extends AnyVal {
     def tap [ Z ] ( f : A => Z ) = { f(a); a }
 
-    def isEmpty
+    def isEmpty : Boolean
       = a match {
-        case null | () => true
+        case null => true
         case x: Boolean => !x
         case x: Byte => x == 0.toByte
         case x: Short => x == 0.toShort
@@ -40,7 +40,7 @@ object `package` {
         case x: Long => x == 0l
         case x: Float => x == 0f
         case x: Double => x == 0d
-        case x: Product => x.productArity == 0
+        case x: Product => x.productIterator.forall(_.isEmpty)
         case x: GenTraversableOnce[_] => x.isEmpty
         case _ => false
       }
