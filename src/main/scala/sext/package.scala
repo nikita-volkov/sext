@@ -29,6 +29,9 @@ object `package` {
   implicit class SextAny [ A ] ( val a : A ) extends AnyVal {
     def tap [ Z ] ( f : A => Z ) = { f(a); a }
 
+    /**
+     * Is the value empty. Equivalent to monoid zero.
+     */
     def isEmpty : Boolean
       = a match {
         case null => true
@@ -88,6 +91,11 @@ object `package` {
   }
 
   implicit class SextAnyToInstanceOf[ A : TypeTag ]( x : A ) {
+    /**
+     * Get an option of this value as of instance of type `T`
+     * @tparam T A type to see this value as
+     * @return `Some(a)` if `a` is an instance of `T` and `None` otherwise
+     */
     def toInstanceOf[ T : TypeTag ] : Option[T]
       = {
         def test
@@ -108,6 +116,9 @@ object `package` {
           case _ => "- "
         }
 
+    /**
+     * @return A readable string representation of this value
+     */
     def treeString
       : String
       = a match {
@@ -131,6 +142,9 @@ object `package` {
             a.toString
         }
 
+    /**
+     * @return A readable string representation of this value of a different format to `treeString`
+     */
     def valueTreeString
       : String
       = a match {
@@ -212,7 +226,7 @@ object `package` {
     }
     
   /**
-   * Useful for wrapping the function and passing as lambda when partially applied
+   * Useful for wrapping a function and passing as lambda when partially applied
    */
   def trying [ A, Z ] ( f : A => Z ) ( a : A ) = a trying f
 
