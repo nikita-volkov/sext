@@ -1,5 +1,6 @@
 package sext
 
+import embrace._
 import util.Try
 import reflect.runtime.universe._
 import reflect.runtime.currentMirror
@@ -27,8 +28,6 @@ object `package` {
 
   implicit class SextAny [ A ] ( val a : A ) extends AnyVal {
     def tap [ B ] ( f : A => B ) = { f(a); a }
-
-    def as [ B ] ( f : A => B ) = f(a)
 
     def isEmpty
       = a match {
@@ -152,7 +151,7 @@ object `package` {
               .map( currentMirror.reflect(a).reflectField )
               .map( f => f.symbol.name.toString.trim -> f.get )
               .reverse
-              .as(collection.immutable.ListMap(_:_*))
+              .$(collection.immutable.ListMap(_:_*))
               .valueTreeString
           case null =>
             "null"
