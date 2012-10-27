@@ -22,12 +22,12 @@ object `package` {
     ( val a : B[A] )
     extends AnyVal
     {
-      def zipBy [C] ( f : A => C ) : B[(A, C)]
-        = a.map(x => x -> f(x)).asInstanceOf[B[(A, C)]]
+      def zipBy [ Z ] ( f : A => Z ) : B[(A, Z)]
+        = a.map(x => x -> f(x)).asInstanceOf[B[(A, Z)]]
     }
 
   implicit class SextAny [ A ] ( val a : A ) extends AnyVal {
-    def tap [ B ] ( f : A => B ) = { f(a); a }
+    def tap [ Z ] ( f : A => Z ) = { f(a); a }
 
     def isEmpty
       = a match {
@@ -52,15 +52,15 @@ object `package` {
     def satisfying(p: A => Boolean) : Option[A]
       = if (p(a)) Some(a) else None
 
-    def trace [ B ] ( f : A => B = (x : A) => x.treeString )
+    def trace [ Z ] ( f : A => Z = (x : A) => x.treeString )
       = { Console.println(f(a)); a }
 
-    def trying [ B ] ( f : A => B ) = Try(f(a)).toOption
+    def trying [ Z ] ( f : A => Z ) = Try(f(a)).toOption
 
     def unfold
-      [ B ]
-      ( f : A => Option[(B, A)] )
-      : Stream[B]
+      [ Z ]
+      ( f : A => Option[(Z, A)] )
+      : Stream[Z]
       = f(a) map {case (b, a) ⇒ b #:: (a unfold f)} getOrElse Stream()
 
     def unfold1
@@ -74,15 +74,15 @@ object `package` {
       = a #:: (f(a) iterate f)
 
     def foldTo
-      [ B ]
-      ( b : Traversable[B] )
-      ( f : (B, A) ⇒ A)
+      [ Z ]
+      ( b : Traversable[Z] )
+      ( f : (Z, A) ⇒ A)
       = (b foldRight a)(f)
 
     def foldFrom
-      [ B ]
-      ( b : Traversable[B] )
-      ( f : (A, B) ⇒ A)
+      [ Z ]
+      ( b : Traversable[Z] )
+      ( f : (A, Z) ⇒ A)
       = (b foldLeft a)(f)
 
   }
@@ -188,7 +188,7 @@ object `package` {
     }
 
   implicit class SextBoolean ( val a : Boolean ) extends AnyVal {
-    def option [ A ] ( b : A ) : Option[A] = if( a ) Some(b) else None
+    def option [ Z ] ( b : Z ) : Option[Z] = if( a ) Some(b) else None
   }
 
   implicit class SextTuple4
@@ -216,12 +216,12 @@ object `package` {
   /**
    * Useful for wrapping the function and passing as lambda when partially applied
    */
-  def trying [ A, B ] ( f : A => B ) ( a : A ) = a trying f
+  def trying [ A, Z ] ( f : A => Z ) ( a : A ) = a trying f
 
-  def memo [ X, R ] ( f : X => R ) = {
+  def memo [ A, Z ] ( f : A => Z ) = {
      // a WeakHashMap will release cache members if memory tightens
-     val cache = new collection.mutable.WeakHashMap[X, R]
-     x : X => cache.getOrElseUpdate( x, f(x) )
+     val cache = new collection.mutable.WeakHashMap[A, Z]
+     x : A => cache.getOrElseUpdate( x, f(x) )
   }
 
 }
