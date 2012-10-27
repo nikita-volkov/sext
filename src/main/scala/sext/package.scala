@@ -25,13 +25,13 @@ object `package` {
         = a.map(x => x -> f(x)).asInstanceOf[B[(A, C)]]
     }
 
-  implicit class SextAny [ A ] ( val x : A ) extends AnyVal {
-    def tap [ B ] ( f : A => B ) = { f(x); x }
+  implicit class SextAny [ A ] ( val a : A ) extends AnyVal {
+    def tap [ B ] ( f : A => B ) = { f(a); a }
 
-    def as [ B ] ( f : A => B ) = f(x)
+    def as [ B ] ( f : A => B ) = f(a)
 
     def isEmpty
-      = x match {
+      = a match {
         case null | () => true
         case x: Boolean => !x
         case x: Byte => x == 0.toByte
@@ -46,57 +46,55 @@ object `package` {
         case _ => false
       }
 
-    def notNull = Option(x)
+    def notNull = Option(a)
 
-    def notEmpty = if (x.isEmpty) None else Some(x)
+    def notEmpty = if (a.isEmpty) None else Some(a)
 
     def satisfying(p: A => Boolean) : Option[A]
-      = if (p(x)) Some(x) else None
+      = if (p(a)) Some(a) else None
 
     def satisfying1
       ( p : A => Boolean )
       : Either[A, A]
-      = if( p(x) ) Left(x)
-        else Right(x)
+      = if( p(a) ) Left(a)
+        else Right(a)
 
     def trace [ B ] ( f : A => B = (x : A) => x.treeString )
-      = { Console.println(f(x)); x }
+      = { Console.println(f(a)); a }
 
-    def trying [ B ] ( f : A => B ) = Try(f(x)).toOption
+    def trying [ B ] ( f : A => B ) = Try(f(a)).toOption
+
+    def unfold
+      [ B ]
+      ( f : A => Option[(B, A)] )
+      : Stream[B]
+      = f(a) map {case (b, a) ⇒ b #:: (a unfold f)} getOrElse Stream()
+
+    def unfold1
+      ( f : A => Option[A] )
+      : Stream[A]
+      = f(a) map (a ⇒ a #:: (a unfold1 f)) getOrElse Stream()
+
+    def iterate
+      ( f : A => A )
+      : Stream[A]
+      = a #:: (f(a) iterate f)
+
+    def foldTo
+      [ B ]
+      ( b : Traversable[B] )
+      ( f : (B, A) ⇒ A)
+      = (b foldRight a)(f)
+
+    def foldFrom
+      [ B ]
+      ( b : Traversable[B] )
+      ( f : (A, B) ⇒ A)
+      = (b foldLeft a)(f)
 
   }
 
-  implicit class SextString
-    ( val s : String )
-    extends AnyVal
-    {
-      def notEmpty
-        = if( s.isEmpty ) None else Some(s)
-      def indent
-        ( i : Int )
-        = prependLines(" " * i)
-      def prependLines
-        ( p : String )
-        = s.lines
-            .reduceOption{ _ + "\n" + p + _ }
-            .map{ p + _ }
-            .getOrElse( p )
-      def splitBy
-        ( splitter : String )
-        : (String, String)
-        = s.indexOf(splitter) match {
-            case -1 => (s, "")
-            case i =>
-              val (a, b) = s.splitAt(i)
-              (a, b.drop(splitter.size))
-          }
-    }
-
-  implicit class SextBoolean ( val a : Boolean ) extends AnyVal {
-    def option [ A ] ( b : A ) : Option[A] = if( a ) Some(b) else None
-  }
-
-  implicit class AnyToInstanceOf[ A : TypeTag ]( x : A ) {
+  implicit class SextAnyToInstanceOf[ A : TypeTag ]( x : A ) {
     def toInstanceOf[ T : TypeTag ] : Option[T]
       = {
         def test
@@ -108,7 +106,7 @@ object `package` {
         else None
       }
   }
-  implicit class AnyTreeString [ A ] ( a : A ) {
+  implicit class SextAnyTreeString [ A ] ( a : A ) {
 
     private def indent ( s : String )
       = s.lines.toStream match {
@@ -169,39 +167,38 @@ object `package` {
         }
 
   }
-  implicit class AnyFunctional [ A ] ( val a : A ) extends AnyVal {
 
-    def unfold
-      [ B ]
-      ( f : A => Option[(B, A)] )
-      : Stream[B]
-      = f(a) map {case (b, a) ⇒ b #:: (a unfold f)} getOrElse Stream()    
+  implicit class SextString
+    ( val s : String )
+    extends AnyVal
+    {
+      def notEmpty
+        = if( s.isEmpty ) None else Some(s)
+      def indent
+        ( i : Int )
+        = prependLines(" " * i)
+      def prependLines
+        ( p : String )
+        = s.lines
+            .reduceOption{ _ + "\n" + p + _ }
+            .map{ p + _ }
+            .getOrElse( p )
+      def splitBy
+        ( splitter : String )
+        : (String, String)
+        = s.indexOf(splitter) match {
+            case -1 => (s, "")
+            case i =>
+              val (a, b) = s.splitAt(i)
+              (a, b.drop(splitter.size))
+          }
+    }
 
-    def unfold1
-      ( f : A => Option[A] )
-      : Stream[A]
-      = f(a) map (a ⇒ a #:: (a unfold1 f)) getOrElse Stream()
-
-    def iterate
-      ( f : A => A )
-      : Stream[A]
-      = a #:: (f(a) iterate f)
-
-    def foldTo
-      [ B ]
-      ( b : Traversable[B] )
-      ( f : (B, A) ⇒ A)
-      = (b foldRight a)(f)
-
-    def foldFrom
-      [ B ]
-      ( b : Traversable[B] )
-      ( f : (A, B) ⇒ A)
-      = (b foldLeft a)(f)
-
+  implicit class SextBoolean ( val a : Boolean ) extends AnyVal {
+    def option [ A ] ( b : A ) : Option[A] = if( a ) Some(b) else None
   }
 
-  implicit class Tuple4Zipped
+  implicit class SextTuple4
     [ A, B, C, D ]
     ( val t : (Iterable[A], Iterable[B], Iterable[C], Iterable[D]) )
     extends AnyVal
@@ -212,7 +209,7 @@ object `package` {
             .map{ case (((a, b), c), d) => (a, b, c, d) }
     }
 
-  implicit class IterableUnzip4
+  implicit class SextIterable
     [ A, B, C, D ]
     ( val ts : Iterable[(A, B, C, D)] )
     extends AnyVal
