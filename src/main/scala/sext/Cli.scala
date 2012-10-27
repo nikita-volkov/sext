@@ -2,8 +2,8 @@ package sext
 
 import embrace._
 
-object Arguments {
-  def parse
+object Cli {
+  def parseArgs
     [ Z ]
     ( args     : Array[String], 
       defaults : Seq[String], 
