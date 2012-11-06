@@ -232,7 +232,7 @@ object `package` {
   def memo [ A, Z ] ( f : A => Z ) = {
      // a WeakHashMap will release cache members if memory tightens
      val cache = new collection.mutable.WeakHashMap[A, Z]
-     x : A => cache.getOrElseUpdate( x, f(x) )
+     x : A => synchronized { cache.getOrElseUpdate( x, f(x) ) }
   }
 
 }
