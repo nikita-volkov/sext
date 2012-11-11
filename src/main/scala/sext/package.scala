@@ -223,7 +223,11 @@ object `package` {
             (a, z) => (a._1 +: z._1, a._2 +: z._2, a._3 +: z._3, a._4 +: z._4)
           )
     }
-    
+
+  implicit class SextInt ( val a : Int ) {
+    def times ( f : => Unit ) = (0 to a).foreach(_ => f)
+  }
+
   /**
    * Useful for wrapping a function and passing as lambda when partially applied
    */
