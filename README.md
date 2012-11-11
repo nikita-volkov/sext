@@ -7,7 +7,7 @@ Add the following Maven dependency (or the appropriate SBT or Gradle one):
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sext</artifactId>
-      <version>0.2.1</version>
+      <version>0.2.2-SNAPSHOT</version>
     </dependency>
 
 Add the following import statement to your files:
