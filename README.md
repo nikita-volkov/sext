@@ -1,5 +1,13 @@
 #SExt
-A small library that adds the missing useful functions to the standard Scala library. Those include `unfold`, `mapKeys`, `zipBy` and others.
+A small library that adds the missing useful functions to the standard Scala library. These include
+
+* `unfold`, `unfold1`, `foldTo`, `foldFrom`
+* `mapKeys`
+* `zipBy`, `unzip4`
+* `treeString`,`valueTreeString`
+* `prependLines`, `splitBy`
+
+... and some others you'll have to check in the [source `src/main/scala/sext/package.scala`](src/main/scala/sext/package.scala)
 
 #Using
 Add the following Maven dependency
