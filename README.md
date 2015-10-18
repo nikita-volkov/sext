@@ -7,7 +7,7 @@ A small library that adds the missing useful functions to the standard Scala lib
 * `treeString`,`valueTreeString`
 * `prependLines`, `splitBy`
 
-... and some others you'll have to check in the [source `src/main/scala/sext/package.scala`]
+... and some others you'll have to check in the [source `src/main/scala/sext/package.scala`](src/main/scala/sext/package.scala)
 
 #Using
 Add the following Maven dependency
