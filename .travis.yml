@@ -1,22 +1,10 @@
 language: scala
 
+jdk:
+  - oraclejdk8
+
 scala:
   - 2.12.0
-  - 2.11.8
-  - 2.10.6
-
-env:
-  - JDK=oraclejdk8
-  - JDK=openjdk6
-
-before_script:
-  - jdk_switcher use $JDK
-
-matrix:
-  # scala 2.12 requires java 8
-  exclude:
-    - scala: 2.12.0
-      env: JDK=openjdk6
 
 install: 
   mvn install -DskipTests=true -Dgpg.skip=true
