@@ -1,13 +1,12 @@
 package sext
 
-import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import collection.immutable.Queue
 
 @RunWith(classOf[JUnitRunner])
-class OrderedMapTest extends FunSuite with ShouldMatchers {
+class OrderedMapTest extends FunSuite with Matchers {
   test("preserves order of creation") {
     val elems = (1 to 100) zip (1 to 100)
     OrderedMap(elems: _*).toSeq should equal (elems)

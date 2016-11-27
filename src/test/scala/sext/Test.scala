@@ -1,12 +1,11 @@
 package sext
 
-import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class Test extends FunSuite with ShouldMatchers {
+class Test extends FunSuite with Matchers {
   import Test._
   test("Tuple4 zipped and unzip4"){
     val as = List("a1", "a2", "a3")
