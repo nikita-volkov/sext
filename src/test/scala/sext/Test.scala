@@ -1,7 +1,6 @@
 package sext
 
-import org.scalatest.FunSuite
-import org.scalatest.matchers.Matchers
+import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
